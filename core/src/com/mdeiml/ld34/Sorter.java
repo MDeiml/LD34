@@ -6,13 +6,14 @@ import java.util.ArrayList;
 
 public class Sorter extends Machine implements ProductTaker {
     
-    private TextureRegion tex;
+    public static TextureRegion tex;
+    
     private Product p;
     private int x;
     private int y;
     private ConveyorBelt right;
     private ConveyorBelt down;
-    private int[] keys;
+    private Key[] keys;
     private boolean fall;
     
     public Sorter(int x, int y) {
@@ -27,6 +28,8 @@ public class Sorter extends Machine implements ProductTaker {
     public void update(float delta, ArrayList<FallingProduct> fallings) {
         if(fall) {
             fallings.add(new FallingProduct(p, down.getY(), down));
+            fall = false;
+            p = null;
         }
     }
 
@@ -41,23 +44,26 @@ public class Sorter extends Machine implements ProductTaker {
     }
 
     @Override
-    public int[] getKeys() {
+    public Key[] getKeys() {
         return keys;
     }
 
     @Override
-    public void setKeys(int[] keys) {
+    public void setKeys(Key[] keys) {
         this.keys = keys;
     }
 
     @Override
-    public void activate(int key) {
+    public void activate(Key key) {
+        if(p == null)
+            return;
         if(keys[0] == key) {
-            //TODO set position
-            down.takeProduct(p);
+            fall = true;
+            p.setX(x+16);
         }else if(keys[1] == key) {
-            //TODO set position
+            p.setX(right.getX());
             right.takeProduct(p);
+            p = null;
         }
     }
 
@@ -68,6 +74,14 @@ public class Sorter extends Machine implements ProductTaker {
         }
         this.p = p;
         return true;
+    }
+
+    public void setRight(ConveyorBelt right) {
+        this.right = right;
+    }
+
+    public void setDown(ConveyorBelt down) {
+        this.down = down;
     }
     
 }

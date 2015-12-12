@@ -8,8 +8,8 @@ public class Product {
     
     private TextureRegion tex;
     private int type;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     
     public Product(int type, TextureRegion tex) {
         this.type = type;
@@ -20,19 +20,19 @@ public class Product {
         batch.draw(tex, x, y);
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
     

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class FallingProduct {
 
-    private static float SPEED = 5;
+    private static float SPEED = 32;
     
     private int destHight;
     private Product p;
@@ -16,12 +16,14 @@ public class FallingProduct {
         this.after = after;
     }
     
-    public void update(float delta) {
-        if(p.getY() < destHight) {
-            p.setY(destHight);
+    public boolean update(float delta) {
+        if(p.getY() <= destHight+8) {
+            p.setY(destHight+8);
             after.takeProduct(p);
+            return true;
         }
-        p.setY(p.getY() - (int)(SPEED * delta));
+        p.setY(p.getY() - SPEED * delta);
+        return false;
     }
     
     public void render(SpriteBatch batch) {

@@ -12,7 +12,7 @@ public class Oven extends Machine implements ProductTaker {
     private Product p;
     private int x;
     private int y;
-    private int[] keys;
+    private Key[] keys;
     private boolean hot;
     private float cookTime;
     private ConveyorBelt after;
@@ -51,17 +51,17 @@ public class Oven extends Machine implements ProductTaker {
     }
 
     @Override
-    public int[] getKeys() {
+    public Key[] getKeys() {
         return keys;
     }
 
     @Override
-    public void setKeys(int[] keys) {
+    public void setKeys(Key[] keys) {
         this.keys = keys;
     }
 
     @Override
-    public void activate(int key) {
+    public void activate(Key key) {
         if(key == keys[0]) {
             hot = !hot;
         }
