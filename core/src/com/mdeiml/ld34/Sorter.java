@@ -12,7 +12,7 @@ public class Sorter extends Machine implements ProductTaker {
     private int y;
     private ConveyorBelt right;
     private ConveyorBelt down;
-    private int[] keys;
+    private Key[] keys;
     private boolean fall;
     
     public Sorter(int x, int y) {
@@ -41,17 +41,17 @@ public class Sorter extends Machine implements ProductTaker {
     }
 
     @Override
-    public int[] getKeys() {
+    public Key[] getKeys() {
         return keys;
     }
 
     @Override
-    public void setKeys(int[] keys) {
+    public void setKeys(Key[] keys) {
         this.keys = keys;
     }
 
     @Override
-    public void activate(int key) {
+    public void activate(Key key) {
         if(keys[0] == key) {
             //TODO set position
             down.takeProduct(p);
