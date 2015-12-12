@@ -3,6 +3,8 @@ package com.mdeiml.ld34;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
@@ -40,6 +42,7 @@ public class PlayScreen implements Screen {
     private ArrayList<Machine> machines;
     private ArrayList<ConveyorBelt> conveyors;
     private LD34Game game;
+    private OrthographicCamera cam;
     
     public PlayScreen(LD34Game game) {
         this.game = game;
@@ -104,6 +107,7 @@ public class PlayScreen implements Screen {
             unprocessed -= 1f/FPS;
         }
         
+        game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         for(ConveyorBelt cb : conveyors) {
             cb.render(game.batch);
@@ -111,11 +115,15 @@ public class PlayScreen implements Screen {
         for(Machine m : machines) {
             m.render(game.batch);
         }
+        game.batch.draw(game.assetMngr.get("Vordergrund.png", Texture.class),0,0);
+        game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        cam = new OrthographicCamera(width/2, height/2);
+        cam.translate(width/4, height/4);
+        cam.update();
     }
 
     @Override
