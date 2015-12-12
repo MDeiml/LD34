@@ -37,6 +37,7 @@ public class PlayScreen implements Screen {
                                        Keys.X,
                                        Keys.Y,
                                        Keys.Z };
+    private static final float INPUT_TIME = 3;
     
     private float unprocessed;
     private ArrayList<Integer> buttons;
@@ -45,6 +46,10 @@ public class PlayScreen implements Screen {
     private LD34Game game;
     private OrthographicCamera cam;
     private ArrayList<FallingProduct> fallings;
+    private int inputX;
+    private int inputY;
+    private ConveyorBelt input;
+    private float inputTime;
     
     public PlayScreen(LD34Game game) {
         this.game = game;
@@ -53,15 +58,16 @@ public class PlayScreen implements Screen {
         machines = new ArrayList<Machine>();
         conveyors = new ArrayList<ConveyorBelt>();
         fallings = new ArrayList<FallingProduct>();
+        inputTime = 0;
+        
         level1();
     }
     
     public void level1() {
+        inputX = 6;
+        inputY = 288;
         ConveyorBelt cb = new ConveyorBelt(0, 256, 64, true, 0);
-        Product p = new Product(0, new TextureRegion(game.assetMngr.get("product1.png", Texture.class)));
-        p.setX(0);
-        p.setY(264);
-        cb.takeProduct(p);
+        input = cb;
         Sorter sorter = new Sorter(47, 249);
         cb.setAfter(sorter);
         conveyors.add(cb);
@@ -72,10 +78,16 @@ public class PlayScreen implements Screen {
         k[1].setY(30);
         System.out.println(Keys.toString(k[0].getKeycode()));
         System.out.println(Keys.toString(k[1].getKeycode()));
-        cb = new ConveyorBelt(38, 181, 5*16+8, true, 0);
+        cb = new ConveyorBelt(0, 181, 7*16+8, false, 0);
+        Exit e = new Exit(0, 180, true);
+        machines.add(e);
+        cb.setAfter(e);
         conveyors.add(cb);
         sorter.setDown(cb);
-        cb = new ConveyorBelt(72, 256, 72, true, 0);
+        cb = new ConveyorBelt(72, 256, 384-72, true, 0);
+        e = new Exit(384-14, 255, false);
+        machines.add(e);
+        cb.setAfter(e);
         conveyors.add(cb);
         sorter.setRight(cb);
     }
@@ -116,6 +128,14 @@ public class PlayScreen implements Screen {
     }
     
     public void update(float delta) {
+        inputTime += delta;
+        if(inputTime >= INPUT_TIME) {
+            Product p = new Product(0, new TextureRegion(game.assetMngr.get("product1.png", Texture.class)));
+            p.setX(inputX);
+            p.setY(inputY);
+            fallings.add(new FallingProduct(p, input.getY(), input));
+            inputTime = 0;
+        }
         for(Machine m : machines) {
             Key[] ks = m.getKeys();
             for(Key k : ks) {
