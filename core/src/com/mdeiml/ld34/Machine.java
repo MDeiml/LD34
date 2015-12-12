@@ -8,8 +8,8 @@ public abstract class Machine {
     public abstract void update(float delta, ArrayList<FallingProduct> fallings);
     public abstract void render(SpriteBatch batch);
     public abstract int getNumberKeys();
-    public abstract int[] getKeys();
-    public abstract void setKeys(int[] keys);
-    public abstract void activate(int key);
+    public abstract Key[] getKeys();
+    public abstract void setKeys(Key[] keys);
+    public abstract void activate(Key key);
     
 }

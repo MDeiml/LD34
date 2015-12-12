@@ -70,9 +70,10 @@ public class PlayScreen implements Screen {
     
     public void addMachine(Machine m) {
         int nKeys = m.getNumberKeys();
-        int[] mKeys = new int[nKeys];
+        Key[] mKeys = new Key[nKeys];
         for(int i = 0; i < nKeys; i++) {
-            mKeys[i] = addButton();
+            //TODO
+            mKeys[i] = new Key(addButton(), 0, 0, null, null);
         }
         m.setKeys(mKeys);
         machines.add(m);
@@ -85,9 +86,10 @@ public class PlayScreen implements Screen {
     
     public void update(float delta) {
         for(Machine m : machines) {
-            int[] ks = m.getKeys();
-            for(int k : ks) {
-                if(Gdx.input.isKeyJustPressed(k)) {
+            Key[] ks = m.getKeys();
+            for(Key k : ks) {
+                k.update();
+                if(k.getState()) {
                     m.activate(k);
                 }
             }
@@ -114,6 +116,13 @@ public class PlayScreen implements Screen {
         
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
+        game.batch.draw(game.assetMngr.get("background.png", Texture.class),0,0);
+        for(Machine m : machines) {
+            Key[] ks = m.getKeys();
+            for(Key k : ks) {
+                k.render(game.batch);
+            }
+        }
         for(FallingProduct p : fallings) {
             p.render(game.batch);
         }
