@@ -27,6 +27,7 @@ public class LD34Game extends Game {
         assetMngr.load("board.png", Texture.class);
         assetMngr.load("product1.png", Texture.class);
         assetMngr.load("sorter.png", Texture.class);
+        assetMngr.load("exit.png", Texture.class);
         for(int i = 1; i <= 3; i++) {
             assetMngr.load("button"+i+"_up.png", Texture.class);
             assetMngr.load("button"+i+"_down.png", Texture.class);
@@ -38,6 +39,7 @@ public class LD34Game extends Game {
         ConveyorBelt.middle = new TextureRegion(assetMngr.get("cb_middle.png", Texture.class));
         ConveyorBelt.right = new TextureRegion(assetMngr.get("cb_right.png", Texture.class));
         Sorter.tex = new TextureRegion(assetMngr.get("sorter.png", Texture.class));
+        Exit.tex = new TextureRegion(assetMngr.get("exit.png", Texture.class));
         setScreen(new PlayScreen(this));
     }
     

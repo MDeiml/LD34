@@ -55,6 +55,8 @@ public class Sorter extends Machine implements ProductTaker {
 
     @Override
     public void activate(Key key) {
+        if(p == null)
+            return;
         if(keys[0] == key) {
             fall = true;
             p.setX(x+16);
