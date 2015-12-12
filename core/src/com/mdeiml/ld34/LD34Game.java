@@ -24,12 +24,20 @@ public class LD34Game extends Game {
         assetMngr.load("cb_left.png", Texture.class);
         assetMngr.load("cb_middle.png", Texture.class);
         assetMngr.load("cb_right.png", Texture.class);
+        assetMngr.load("board.png", Texture.class);
+        assetMngr.load("product1.png", Texture.class);
+        assetMngr.load("sorter.png", Texture.class);
+        for(int i = 1; i <= 3; i++) {
+            assetMngr.load("button"+i+"_up.png", Texture.class);
+            assetMngr.load("button"+i+"_down.png", Texture.class);
+        }
         assetMngr.finishLoadingAsset("skin.atlas");
         assetMngr.load("skin.json", Skin.class, new SkinLoader.SkinParameter("skin.atlas"));
         assetMngr.finishLoading();
         ConveyorBelt.left = new TextureRegion(assetMngr.get("cb_left.png", Texture.class));
         ConveyorBelt.middle = new TextureRegion(assetMngr.get("cb_middle.png", Texture.class));
         ConveyorBelt.right = new TextureRegion(assetMngr.get("cb_right.png", Texture.class));
+        Sorter.tex = new TextureRegion(assetMngr.get("sorter.png", Texture.class));
         setScreen(new PlayScreen(this));
     }
     

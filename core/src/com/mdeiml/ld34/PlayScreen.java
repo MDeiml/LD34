@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
@@ -52,32 +53,61 @@ public class PlayScreen implements Screen {
         machines = new ArrayList<Machine>();
         conveyors = new ArrayList<ConveyorBelt>();
         fallings = new ArrayList<FallingProduct>();
-        conveyors.add(new ConveyorBelt(100, 100, 72, true, null, 0));
+        level1();
+    }
+    
+    public void level1() {
+        ConveyorBelt cb = new ConveyorBelt(0, 256, 64, true, 0);
+        Product p = new Product(0, new TextureRegion(game.assetMngr.get("product1.png", Texture.class)));
+        p.setX(0);
+        p.setY(264);
+        cb.takeProduct(p);
+        Sorter sorter = new Sorter(47, 249);
+        cb.setAfter(sorter);
+        conveyors.add(cb);
+        Key[] k = addMachine(sorter);
+        k[0].setX(192-13);
+        k[0].setY(30);
+        k[1].setX(192);
+        k[1].setY(30);
+        System.out.println(Keys.toString(k[0].getKeycode()));
+        System.out.println(Keys.toString(k[1].getKeycode()));
+        cb = new ConveyorBelt(38, 181, 5*16+8, true, 0);
+        conveyors.add(cb);
+        sorter.setDown(cb);
+        cb = new ConveyorBelt(72, 256, 72, true, 0);
+        conveyors.add(cb);
+        sorter.setRight(cb);
     }
     
     public int addButton() {
         int left = KEYS.length - buttons.size();
         int rand = (int)(left * Math.random());
         int i = 0;
+        int j = 0;
         while(i <= rand) {
-            if(!buttons.contains(KEYS[i]))
+            if(!buttons.contains(KEYS[j]))
                 i++;
+            j++;
         }
-        i--;
-        int k = KEYS[i];
+        j--;
+        int k = KEYS[j];
         buttons.add(k);
         return k;
     }
     
-    public void addMachine(Machine m) {
+    public Key[] addMachine(Machine m) {
         int nKeys = m.getNumberKeys();
         Key[] mKeys = new Key[nKeys];
         for(int i = 0; i < nKeys; i++) {
-            //TODO
-            mKeys[i] = new Key(addButton(), 0, 0, null, null);
+            int b = buttons.size()+1;
+            TextureRegion up = new TextureRegion(game.assetMngr.get("button"+b+"_up.png", Texture.class));
+            TextureRegion down = new TextureRegion(game.assetMngr.get("button"+b+"_down.png", Texture.class));
+            mKeys[i] = new Key(addButton(), 0, 0, up, down);
         }
         m.setKeys(mKeys);
         machines.add(m);
+        return mKeys;
     }
     
     @Override
@@ -90,13 +120,16 @@ public class PlayScreen implements Screen {
             Key[] ks = m.getKeys();
             for(Key k : ks) {
                 k.update();
-                if(k.getState()) {
+                if(Gdx.input.isKeyJustPressed(k.getKeycode())) {
                     m.activate(k);
                 }
             }
         }
-        for(FallingProduct p : fallings) {
-            p.update(delta);
+        for(int i = 0; i < fallings.size(); i++) {
+            if(fallings.get(i).update(delta)) {
+                fallings.remove(i);
+                i--;
+            }
         }
         for(ConveyorBelt cb : conveyors) {
             cb.update(delta, fallings);
@@ -118,6 +151,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         game.batch.draw(game.assetMngr.get("background.png", Texture.class),0,0);
+        game.batch.draw(game.assetMngr.get("board.png", Texture.class), 0, 0);
         for(Machine m : machines) {
             Key[] ks = m.getKeys();
             for(Key k : ks) {
@@ -133,7 +167,7 @@ public class PlayScreen implements Screen {
         for(Machine m : machines) {
             m.render(game.batch);
         }
-        game.batch.draw(game.assetMngr.get("Vordergrund.png", Texture.class),0,0);
+        //game.batch.draw(game.assetMngr.get("Vordergrund.png", Texture.class),0,0);
         game.batch.end();
     }
 
