@@ -52,6 +52,7 @@ public class PlayScreen implements Screen {
         machines = new ArrayList<Machine>();
         conveyors = new ArrayList<ConveyorBelt>();
         fallings = new ArrayList<FallingProduct>();
+        conveyors.add(new ConveyorBelt(100, 100, 72, true, null, 0));
     }
     
     public int addButton() {

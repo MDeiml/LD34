@@ -1,11 +1,15 @@
 package com.mdeiml.ld34;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 
 public class ConveyorBelt implements ProductTaker {
     
     private static final float SPEED = 16;
+    public static TextureRegion middle;
+    public static TextureRegion left;
+    public static TextureRegion right;
     
     private int x;
     private int y;
@@ -54,6 +58,17 @@ public class ConveyorBelt implements ProductTaker {
     }
     
     public void render(SpriteBatch batch) {
+        for(int x1 = x; x1 < x + width - 16; x1 += 16) {
+            TextureRegion t;
+            if(x1 == x) {
+                t = left;
+            }else {
+                t = middle;
+            }
+            batch.draw(t, x1, y);
+        }
+        batch.draw(right, x + width - 16, y);
+        
         for(Product p : products) {
             p.render(batch);
         }

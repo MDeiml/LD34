@@ -14,16 +14,22 @@ public class LD34Game extends Game {
     SpriteBatch batch;
     
     @Override
-    public void create () {
+    public void create() {
         batch = new SpriteBatch();
         assetMngr = new AssetManager();
         assetMngr.load("skin.atlas", TextureAtlas.class);
         assetMngr.load("Vordergrund.png", Texture.class);
         assetMngr.load("background.png", Texture.class);
         assetMngr.load("ascii.fnt", BitmapFont.class);
+        assetMngr.load("cb_left.png", Texture.class);
+        assetMngr.load("cb_middle.png", Texture.class);
+        assetMngr.load("cb_right.png", Texture.class);
         assetMngr.finishLoadingAsset("skin.atlas");
         assetMngr.load("skin.json", Skin.class, new SkinLoader.SkinParameter("skin.atlas"));
         assetMngr.finishLoading();
+        ConveyorBelt.left = new TextureRegion(assetMngr.get("cb_left.png", Texture.class));
+        ConveyorBelt.middle = new TextureRegion(assetMngr.get("cb_middle.png", Texture.class));
+        ConveyorBelt.right = new TextureRegion(assetMngr.get("cb_right.png", Texture.class));
         setScreen(new PlayScreen(this));
     }
     
