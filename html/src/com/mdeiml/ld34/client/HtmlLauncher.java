@@ -3,7 +3,7 @@ package com.mdeiml.ld34.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.mdeiml.ld34.Game;
+import com.mdeiml.ld34.LD34Game;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +14,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new Game();
+                return new LD34Game();
         }
 }
