@@ -13,15 +13,15 @@ public class ConveyorBelt implements ProductTaker {
     private boolean dir;
     private ArrayList<Product> products;
     private ProductTaker after;
-    private int fallHight;
+    private int fallHeight;
     
-    public ConveyorBelt(int x, int y, int width, boolean dir, ProductTaker after, int fallHight) {
+    public ConveyorBelt(int x, int y, int width, boolean dir, ProductTaker after, int fallHeight) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.dir = dir;
         this.products = new ArrayList<Product>();
-        this.fallHight = fallHight;
+        this.fallHeight = fallHeight;
         this.after = after;
     }
     
@@ -34,7 +34,7 @@ public class ConveyorBelt implements ProductTaker {
         return true;
     }
     
-    public void update(float delta) {
+    public void update(float delta, ArrayList<FallingProduct> fallings) {
         for(int i = 0; i < products.size(); i++) {
             Product p = products.get(i);
             int px = p.getX();
@@ -42,7 +42,13 @@ public class ConveyorBelt implements ProductTaker {
             p.setX(px);
             if(px > x + width || px < x) {
                 p.setX(Math.max(Math.min(px, x + width), x));
-                after.takeProduct(p);
+                if(fallHeight > 0) {
+                    fallings.add(new FallingProduct(p, fallHeight, after));
+                }else {
+                    after.takeProduct(p);
+                }
+                products.remove(i);
+                i--;
             }
         }
     }
@@ -51,6 +57,18 @@ public class ConveyorBelt implements ProductTaker {
         for(Product p : products) {
             p.render(batch);
         }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return width;
     }
     
 }

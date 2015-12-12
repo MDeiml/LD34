@@ -43,6 +43,7 @@ public class PlayScreen implements Screen {
     private ArrayList<ConveyorBelt> conveyors;
     private LD34Game game;
     private OrthographicCamera cam;
+    private ArrayList<FallingProduct> fallings;
     
     public PlayScreen(LD34Game game) {
         this.game = game;
@@ -50,6 +51,7 @@ public class PlayScreen implements Screen {
         buttons = new ArrayList<Integer>();
         machines = new ArrayList<Machine>();
         conveyors = new ArrayList<ConveyorBelt>();
+        fallings = new ArrayList<FallingProduct>();
     }
     
     public int addButton() {
@@ -90,11 +92,14 @@ public class PlayScreen implements Screen {
                 }
             }
         }
+        for(FallingProduct p : fallings) {
+            p.update(delta);
+        }
         for(ConveyorBelt cb : conveyors) {
-            cb.update(delta);
+            cb.update(delta, fallings);
         }
         for(Machine m : machines) {
-            m.update(delta);
+            m.update(delta, fallings);
         }
     }
 
@@ -109,6 +114,9 @@ public class PlayScreen implements Screen {
         
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
+        for(FallingProduct p : fallings) {
+            p.render(game.batch);
+        }
         for(ConveyorBelt cb : conveyors) {
             cb.render(game.batch);
         }

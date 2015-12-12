@@ -2,6 +2,7 @@ package com.mdeiml.ld34;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import java.util.ArrayList;
 
 public class Oven extends Machine implements ProductTaker {
 
@@ -26,7 +27,7 @@ public class Oven extends Machine implements ProductTaker {
     }
     
     @Override
-    public void update(float delta) {
+    public void update(float delta, ArrayList<FallingProduct> fallings) {
         if(p != null) {
             if(hot) {
                 cookTime -= delta;

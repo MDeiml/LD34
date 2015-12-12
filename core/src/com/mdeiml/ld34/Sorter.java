@@ -2,6 +2,7 @@ package com.mdeiml.ld34;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import java.util.ArrayList;
 
 public class Sorter extends Machine implements ProductTaker {
     
@@ -12,17 +13,21 @@ public class Sorter extends Machine implements ProductTaker {
     private ConveyorBelt right;
     private ConveyorBelt down;
     private int[] keys;
+    private boolean fall;
     
     public Sorter(int x, int y) {
         p = null;
         keys = null;
+        fall = false;
         this.x = x;
         this.y = y;
     }
 
     @Override
-    public void update(float delta) {
-        
+    public void update(float delta, ArrayList<FallingProduct> fallings) {
+        if(fall) {
+            fallings.add(new FallingProduct(p, down.getY(), down));
+        }
     }
 
     @Override
