@@ -1,5 +1,6 @@
 package com.mdeiml.ld34;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
@@ -33,10 +34,17 @@ public class Oven extends Machine implements ProductTaker {
             if(hot) {
                 cookTime -= delta;
                 if(cookTime < 0) {
-                    after.takeProduct(p);
+                    if(p.getType() == 3) {
+                        Product p1 = new Product(4, new TextureRegion(LD34Game.a.get("p4.png", Texture.class)));
+                        p1.setX(after.getX());
+                        p1.setY(after.getY()+8);
+                        after.takeProduct(p1);
+                    }
                     p = null;
                 }
             }else {
+                p.setX(after.getX());
+                p.setY(after.getY()+8);
                 after.takeProduct(p);
                 p = null;
             }

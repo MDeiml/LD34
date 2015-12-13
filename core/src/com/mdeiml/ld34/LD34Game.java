@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class LD34Game extends Game {
+    
+    public static AssetManager a;
 	
     AssetManager assetMngr;
     SpriteBatch batch;
@@ -20,6 +22,7 @@ public class LD34Game extends Game {
     public void create() {
         batch = new SpriteBatch();
         assetMngr = new AssetManager();
+        a = assetMngr;
         
         assetMngr.setLoader(String.class, new TextLoader(new InternalFileHandleResolver()));
         
@@ -31,7 +34,9 @@ public class LD34Game extends Game {
         assetMngr.load("cb_middle.png", Texture.class);
         assetMngr.load("cb_right.png", Texture.class);
         assetMngr.load("board.png", Texture.class);
-        assetMngr.load("product1.png", Texture.class);
+        for(int i = 1; i <= 6; i++) {
+            assetMngr.load("p"+i+".png", Texture.class);
+        }
         assetMngr.load("sorter.png", Texture.class);
         assetMngr.load("exit.png", Texture.class);
         assetMngr.load("input.png", Texture.class);
@@ -40,6 +45,7 @@ public class LD34Game extends Game {
         assetMngr.load("mixer.png", Texture.class);
         assetMngr.load("Guillotine.png", Texture.class);
         assetMngr.load("trapdoor.png", Texture.class);
+        assetMngr.load("packer.png", Texture.class);
         assetMngr.load("ambient.wav", Sound.class);
         for(int i = 1; i <= 7; i++) {
             assetMngr.load("button"+i+"_up.png", Texture.class);
@@ -59,6 +65,7 @@ public class LD34Game extends Game {
         Oven.on = new TextureRegion(t, 0, 0, 45, 56);
         Oven.off = new TextureRegion(t, 45, 0, 45, 56);
         Oven.cook = new TextureRegion(t, 90, 0, 45, 56);
+        Packer.tex = new TextureRegion(assetMngr.get("packer.png", Texture.class));
         t = assetMngr.get("press.png", Texture.class);
         TextureRegion[] anim = new TextureRegion[7];
         for(int i = 0; i < 7; i++) {

@@ -32,7 +32,10 @@ public class Mixer extends Machine {
             animTime -= delta;
             if(animTime <= 0) {
                 if(left[0] != null && right[0] != null) {
-                    after.takeProduct(left[0]);
+                    Product p = left[0];
+                    p.setX(after.getX()+after.getWidth());
+                    p.setY(after.getY()+8);
+                    after.takeProduct(p);
                     for(int i = 0; i < left.length-1; i++) {
                         left[i] = left[i+1];
                         right[i] = right[i+1];

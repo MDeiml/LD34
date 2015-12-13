@@ -1,12 +1,13 @@
 package com.mdeiml.ld34;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 
 public class Packer extends Machine {
     
-    private static final float TIME = 3;
+    private static final float TIME = 2;
     public static TextureRegion tex;
     
     private int x;
@@ -36,7 +37,12 @@ public class Packer extends Machine {
             timer -= delta;
             if(timer <= 0) {
                 timer = 0;
-                after.takeProduct(p);
+                if(p.getType() == 6) {
+                    Product p1 = new Product(1, new TextureRegion(LD34Game.a.get("p1.png", Texture.class)));
+                    p1.setX(after.getX());
+                    p1.setY(p.getY());
+                    after.takeProduct(p1);
+                }
                 p = null;
             }
         }else {
@@ -44,7 +50,9 @@ public class Packer extends Machine {
                 if(on) {
                     timer = TIME;
                 }else {
+                    p.setX(after.getX());
                     after.takeProduct(p);
+                    p = null;
                 }
             }
         }

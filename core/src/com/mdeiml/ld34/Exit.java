@@ -11,16 +11,26 @@ public class Exit extends Machine {
     private int x;
     private int y;
     private boolean dir;
+    private int[] ps;
+    private PlayScreen game;
     
-    public Exit(int x, int y, boolean dir) {
+    public Exit(int x, int y, boolean dir, int[] ps, PlayScreen game) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.ps = ps;
+        this.game = game;
     }
     
     @Override
     public boolean takeProduct(Product p) {
-        return true;
+        for(int pi : ps) {
+            if(pi == p.getType()) {
+                game.addPoint();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

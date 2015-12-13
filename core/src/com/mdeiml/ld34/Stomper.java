@@ -1,5 +1,6 @@
 package com.mdeiml.ld34;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
@@ -25,7 +26,17 @@ public class Stomper extends Machine {
     @Override
     public void update(float delta, ArrayList<FallingProduct> fallings) {
         if(anim != 0) {
+            boolean b1 = anim > ANIM_TIME/2;
             anim -= delta;
+            if(p != null && b1 && anim <= ANIM_TIME/2) {
+                Product p1 = p;
+                p = null;
+                if(p1.getType() == 5) {
+                    p = new Product(6, new TextureRegion(LD34Game.a.get("p6.png", Texture.class)));
+                    p.setX(p1.getX());
+                    p.setY(p1.getY());
+                }
+            }
             if(anim <= 0)
                 anim = 0;
         }

@@ -1,9 +1,9 @@
-7 0 0
+7 0 0 1,2,3
 C 0 52 56 true 0 1
 S 47 59 2 4
 C 0 107 72 false 0 3
-E 0 109 true
+E 0 109 true 1
 C 70 52 72 true 0 5
 O 134 55 6
 C 140 52 244 true 0 7
-E 370 54 false
+E 370 54 false 2,4

@@ -35,6 +35,10 @@ public class Product {
     public void setY(float y) {
         this.y = y;
     }
+
+    public int getType() {
+        return type;
+    }
     
     
     
