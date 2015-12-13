@@ -1,6 +1,8 @@
 package com.mdeiml.ld34;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -14,14 +16,17 @@ public class Key {
     private int keycode;
     private boolean leaver;
     
-    public Key(int code, int x, int y, TextureRegion up, TextureRegion down) {
+    public Key(int code, int x, int y) {
         this.x = x;
         this.y = y;
-        this.up = up;
-        this.down = down;
         this.keycode = code;
         this.state = false;
         this.leaver = false;
+    }
+    
+    public void setButton(AssetManager assetMngr, int n) {
+        up = new TextureRegion(assetMngr.get("button"+n+"_up.png", Texture.class));
+        down = new TextureRegion(assetMngr.get("button"+n+"_down.png", Texture.class));
     }
     
     public void update() {

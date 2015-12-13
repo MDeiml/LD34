@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
@@ -63,7 +61,7 @@ public class PlayScreen implements Screen {
         fallings = new ArrayList<FallingProduct>();
         inputTime = 0;
         
-        loadLevel("lvl4.txt");
+        loadLevel("lvl5.txt");
     }
     
     public void loadLevel(String filename) {
@@ -129,6 +127,20 @@ public class PlayScreen implements Screen {
                     objects.add(s);
                     break;
                 }
+                case 'H':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    Hacker h = new Hacker(x, y);
+                    objects.add(h);
+                    break;
+                }
+                case 'P':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    Packer p = new Packer(x, y);
+                    objects.add(p);
+                    break;
+                }
             }
         }
         
@@ -151,8 +163,10 @@ public class PlayScreen implements Screen {
                     Key[] k = addMachine(s);
                     k[0].setX(192-13);
                     k[0].setY(30);
+                    k[0].setButton(game.assetMngr, 1);
                     k[1].setX(192);
                     k[1].setY(30);
+                    k[1].setButton(game.assetMngr, 2);
                     break;
                 }
                 case 'E':{
@@ -168,6 +182,7 @@ public class PlayScreen implements Screen {
                     k[0].setX(140);
                     k[0].setY(28);
                     k[0].setLeaver(true);
+                    k[0].setButton(game.assetMngr, 3);
                     break;
                 }
                 case 'T':{
@@ -177,6 +192,7 @@ public class PlayScreen implements Screen {
                     Key[] k = addMachine(s);
                     k[0].setX(220);
                     k[0].setY(27);
+                    k[0].setButton(game.assetMngr, 4);
                     break;
                 }
                 case 'M':{
@@ -186,6 +202,29 @@ public class PlayScreen implements Screen {
                     Key[] k = addMachine(m);
                     k[0].setX(260);
                     k[0].setY(27);
+                    k[0].setButton(game.assetMngr, 5);
+                    break;
+                }
+                case 'H':{
+                    Hacker h = (Hacker)objects.get(i-1);
+                    int left = Integer.parseInt(tokens[3]);
+                    h.setLeft((ConveyorBelt)objects.get(left));
+                    int right = Integer.parseInt(tokens[4]);
+                    h.setRight((ConveyorBelt)objects.get(right));
+                    Key[] k = addMachine(h);
+                    k[0].setX(40);
+                    k[0].setY(37);
+                    k[0].setButton(game.assetMngr, 6);
+                    break;
+                }
+                case 'P':{
+                    Packer p = (Packer)objects.get(i-1);
+                    int after = Integer.parseInt(tokens[3]);
+                    p.setAfter((ConveyorBelt)objects.get(after));
+                    Key[] k = addMachine(p);
+                    k[0].setX(240);
+                    k[0].setY(40);
+                    k[0].setButton(game.assetMngr, 7);
                     break;
                 }
             }
@@ -214,10 +253,7 @@ public class PlayScreen implements Screen {
         int nKeys = m.getNumberKeys();
         Key[] mKeys = new Key[nKeys];
         for(int i = 0; i < nKeys; i++) {
-            int b = buttons.size()+1;
-            TextureRegion up = new TextureRegion(game.assetMngr.get("button"+b+"_up.png", Texture.class));
-            TextureRegion down = new TextureRegion(game.assetMngr.get("button"+b+"_down.png", Texture.class));
-            mKeys[i] = new Key(addButton(), 0, 0, up, down);
+            mKeys[i] = new Key(addButton(), 0, 0);
         }
         m.setKeys(mKeys);
         machines.add(m);
@@ -272,7 +308,7 @@ public class PlayScreen implements Screen {
         
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
-        game.batch.draw(game.assetMngr.get("background.png", Texture.class),0,0);
+        game.batch.draw(game.assetMngr.get("Background.png", Texture.class),0,0);
         for(FallingProduct p : fallings) {
             p.render(game.batch);
         }

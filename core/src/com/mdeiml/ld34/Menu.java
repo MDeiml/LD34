@@ -2,6 +2,7 @@ package com.mdeiml.ld34;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -17,6 +18,8 @@ public class Menu implements Screen {
         stage = new Stage(new FitViewport(384, 288));
         Table layout = new Table(skin);
         layout.setFillParent(true);
+        layout.add("INSERT TITLE HERE");
+        layout.row();
         TextButton play = new TextButton("Play", skin);
         layout.add(play);
         layout.row();
@@ -31,6 +34,9 @@ public class Menu implements Screen {
     @Override
     public void render(float delta) {
         stage.act(delta);
+        game.batch.begin();
+        game.batch.draw(game.assetMngr.get("Background.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.batch.end();
         stage.draw();
     }
 

@@ -3,6 +3,7 @@ package com.mdeiml.ld34;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,11 +21,11 @@ public class LD34Game extends Game {
         batch = new SpriteBatch();
         assetMngr = new AssetManager();
         
-        assetMngr.setLoader(String.class, new TextLoader(new LocalFileHandleResolver()));
+        assetMngr.setLoader(String.class, new TextLoader(new InternalFileHandleResolver()));
         
         assetMngr.load("skin.atlas", TextureAtlas.class);
         assetMngr.load("Vordergrund.png", Texture.class);
-        assetMngr.load("background.png", Texture.class);
+        assetMngr.load("Background.png", Texture.class);
         assetMngr.load("ascii.fnt", BitmapFont.class);
         assetMngr.load("cb_left.png", Texture.class);
         assetMngr.load("cb_middle.png", Texture.class);
@@ -37,8 +38,10 @@ public class LD34Game extends Game {
         assetMngr.load("oven.png", Texture.class);
         assetMngr.load("press.png", Texture.class);
         assetMngr.load("mixer.png", Texture.class);
+        assetMngr.load("Guillotine.png", Texture.class);
+        assetMngr.load("trapdoor.png", Texture.class);
         assetMngr.load("ambient.wav", Sound.class);
-        for(int i = 1; i <= 5; i++) {
+        for(int i = 1; i <= 7; i++) {
             assetMngr.load("button"+i+"_up.png", Texture.class);
             assetMngr.load("button"+i+"_down.png", Texture.class);
         }
@@ -68,7 +71,19 @@ public class LD34Game extends Game {
             anim[i] = new TextureRegion(t, i*66, 0, 66, 66);
         }
         Mixer.frames = anim;
-        setScreen(new PlayScreen(this));
+        t = assetMngr.get("Guillotine.png", Texture.class);
+        anim = new TextureRegion[7];
+        for(int i = 0; i < 7; i++) {
+            anim[i] = new TextureRegion(t, i*6, 0, 6, 37);
+        }
+        Hacker.blade = anim;
+        t = assetMngr.get("trapdoor.png", Texture.class);
+        anim = new TextureRegion[7];
+        for(int i = 0; i < 7; i++) {
+            anim[i] = new TextureRegion(t, i*38, 0, 38, 21);
+        }
+        Hacker.trapdoor = anim;
+        setScreen(new Menu(this));
         assetMngr.get("ambient.wav", Sound.class).loop();
     }
     

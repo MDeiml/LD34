@@ -8,7 +8,9 @@ public class Hacker extends Machine {
 
     private static final float TIME = 3;
     private static final float ANIM_TIME = 0.5f;
-    public static TextureRegion[] frames;
+    private static final float ANIM_TIME1 = 0.5f;
+    public static TextureRegion[] blade;
+    public static TextureRegion[] trapdoor;
     
     private int x;
     private int y;
@@ -18,6 +20,7 @@ public class Hacker extends Machine {
     private Key[] keys;
     private float timer;
     private float animTime;
+    private float animTime1;
     
     public Hacker(int x, int y) {
         this.x = x;
@@ -31,21 +34,37 @@ public class Hacker extends Machine {
         if(timer > 0) {
             timer = timer - delta;
             if(timer <= 0) {
-                //TODO
+                animTime1 = ANIM_TIME1;
             }
         }
         if(animTime > 0) {
+            animTime1 = 0;
             animTime -= delta;
             if(animTime <= 0) {
                 animTime = 0;
+                animTime1 = ANIM_TIME1;
+            }
+        }
+        if(animTime1 > 0) {
+            timer = 0;
+            animTime1 -= delta;
+            if(p != null && animTime1 < ANIM_TIME1/2) {
+                p.setX(x);
+                fallings.add(new FallingProduct(p, left.getY(), left));
+                p = null;
+            }
+            if(animTime1 <= 0) {
+                animTime1 = 0;
             }
         }
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(frames[(int)(animTime/ANIM_TIME*7)], TIME, TIME);
-        p.render(batch);
+        batch.draw(trapdoor[(int)(animTime1/ANIM_TIME1*7)], x, y);
+        batch.draw(blade[(int)(animTime/ANIM_TIME*7)], x+16, y+21);
+        if(p != null)
+            p.render(batch);
     }
 
     @Override
@@ -72,9 +91,19 @@ public class Hacker extends Machine {
     public boolean takeProduct(Product p) {
         if(this.p != null)
             return false;
+        p.setX(x+8);
+        p.setY(y+21);
         this.p = p;
         this.timer = TIME;
         return true;
+    }
+
+    public void setLeft(ConveyorBelt left) {
+        this.left = left;
+    }
+
+    public void setRight(ConveyorBelt right) {
+        this.right = right;
     }
 
 }
