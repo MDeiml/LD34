@@ -4,45 +4,48 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 
-public class Stomper extends Machine {
+public class Hacker extends Machine {
 
-    private static final float ANIM_TIME = 0.3f;
-    private static final int SPEED = 16;
+    private static final float TIME = 3;
+    private static final float ANIM_TIME = 0.5f;
     public static TextureRegion[] frames;
     
     private int x;
     private int y;
-    private float anim;
+    private ConveyorBelt left;
+    private ConveyorBelt right;
     private Product p;
     private Key[] keys;
-    private ProductTaker after;
+    private float timer;
+    private float animTime;
     
-    public Stomper(int x, int y) {
+    public Hacker(int x, int y) {
         this.x = x;
         this.y = y;
-    } 
+        this.timer = 0;
+        this.animTime = 0;
+    }
     
     @Override
     public void update(float delta, ArrayList<FallingProduct> fallings) {
-        if(anim != 0) {
-            anim -= delta;
-            if(anim <= 0)
-                anim = 0;
+        if(timer > 0) {
+            timer = timer - delta;
+            if(timer <= 0) {
+                //TODO
+            }
         }
-        if(p != null) {
-            p.setX(p.getX() + delta * SPEED);
-            if(p.getX() > x + 45) {
-                after.takeProduct(p);
-                p = null;
+        if(animTime > 0) {
+            animTime -= delta;
+            if(animTime <= 0) {
+                animTime = 0;
             }
         }
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(frames[(int)(anim/ANIM_TIME*7)], x, y);
-        if(p != null)
-            p.render(batch);
+        batch.draw(frames[(int)(animTime/ANIM_TIME*)], TIME, TIME);
+        p.render(batch);
     }
 
     @Override
@@ -62,7 +65,7 @@ public class Stomper extends Machine {
 
     @Override
     public void activate(Key key) {
-        anim = ANIM_TIME;
+        animTime = ANIM_TIME;
     }
 
     @Override
@@ -70,11 +73,8 @@ public class Stomper extends Machine {
         if(this.p != null)
             return false;
         this.p = p;
+        this.timer = TIME;
         return true;
-    }
-
-    public void setAfter(ProductTaker after) {
-        this.after = after;
     }
 
 }

@@ -166,7 +166,6 @@ public class PlayScreen implements Screen {
                 case 'T':{
                     Stomper s = (Stomper)objects.get(i-1);
                     int after = Integer.parseInt(tokens[3]);
-                    System.out.println(after);
                     s.setAfter(objects.get(after));
                     Key[] k = addMachine(s);
                     k[0].setX(220);

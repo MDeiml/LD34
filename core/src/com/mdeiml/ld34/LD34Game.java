@@ -47,9 +47,11 @@ public class LD34Game extends Game {
         ConveyorBelt.left = new TextureRegion(assetMngr.get("cb_left.png", Texture.class));
         ConveyorBelt.middle = new TextureRegion(assetMngr.get("cb_middle.png", Texture.class));
         ConveyorBelt.right = new TextureRegion(assetMngr.get("cb_right.png", Texture.class));
-        Sorter.tex = new TextureRegion(assetMngr.get("sorter.png", Texture.class));
+        Texture t = assetMngr.get("sorter.png", Texture.class);
+        Sorter.on = new TextureRegion(t, 0, 0, 32, 30);
+        Sorter.off = new TextureRegion(t, 32, 0, 32, 30);
         Exit.tex = new TextureRegion(assetMngr.get("exit.png", Texture.class));
-        Texture t = assetMngr.get("oven.png", Texture.class);
+        t = assetMngr.get("oven.png", Texture.class);
         Oven.on = new TextureRegion(t, 0, 0, 45, 56);
         Oven.off = new TextureRegion(t, 45, 0, 45, 56);
         Oven.cook = new TextureRegion(t, 90, 0, 45, 56);

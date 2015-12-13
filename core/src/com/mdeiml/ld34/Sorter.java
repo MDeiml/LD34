@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class Sorter extends Machine implements ProductTaker {
     
-    public static TextureRegion tex;
+    public static TextureRegion off;
+    public static TextureRegion on;
     
     private Product p;
     private int x;
@@ -35,7 +36,10 @@ public class Sorter extends Machine implements ProductTaker {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(tex, x, y);
+        if(p != null)
+            batch.draw(on, x, y);
+        else
+            batch.draw(off, x, y);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class Sorter extends Machine implements ProductTaker {
             return;
         if(keys[0] == key) {
             fall = true;
-            p.setX(x+16);
+            p.setX(x+8);
         }else if(keys[1] == key) {
             p.setX(right.getX());
             right.takeProduct(p);
