@@ -44,7 +44,7 @@ public class Mixer extends Machine {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(frames[(int)(animTime/ANIM_TIME*7)], animTime, animTime);
+        batch.draw(frames[(int)(animTime/ANIM_TIME*7)], x, y);
     }
 
     @Override
@@ -88,6 +88,10 @@ public class Mixer extends Machine {
             }
             return false;
         }
+    }
+
+    public void setAfter(ConveyorBelt after) {
+        this.after = after;
     }
 
 }

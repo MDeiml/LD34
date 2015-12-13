@@ -47,7 +47,7 @@ public class ConveyorBelt implements ProductTaker {
             if(px > x + width || px < x) {
                 p.setX(Math.max(Math.min(px, x + width), x));
                 if(fallHeight > 0) {
-                    fallings.add(new FallingProduct(p, fallHeight, after));
+                    fallings.add(new FallingProduct(p, y-fallHeight, after));
                 }else {
                     after.takeProduct(p);
                 }

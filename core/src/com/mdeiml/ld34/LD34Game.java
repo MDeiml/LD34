@@ -36,8 +36,9 @@ public class LD34Game extends Game {
         assetMngr.load("input.png", Texture.class);
         assetMngr.load("oven.png", Texture.class);
         assetMngr.load("press.png", Texture.class);
+        assetMngr.load("mixer.png", Texture.class);
         assetMngr.load("ambient.wav", Sound.class);
-        for(int i = 1; i <= 4; i++) {
+        for(int i = 1; i <= 5; i++) {
             assetMngr.load("button"+i+"_up.png", Texture.class);
             assetMngr.load("button"+i+"_down.png", Texture.class);
         }
@@ -61,6 +62,12 @@ public class LD34Game extends Game {
             anim[i] = new TextureRegion(t, i*30, 0, 30, 47);
         }
         Stomper.frames = anim;
+        t = assetMngr.get("mixer.png", Texture.class);
+        anim = new TextureRegion[7];
+        for(int i = 0; i < 7; i++) {
+            anim[i] = new TextureRegion(t, i*66, 0, 66, 66);
+        }
+        Mixer.frames = anim;
         setScreen(new PlayScreen(this));
         assetMngr.get("ambient.wav", Sound.class).loop();
     }

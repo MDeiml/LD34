@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
         fallings = new ArrayList<FallingProduct>();
         inputTime = 0;
         
-        loadLevel("lvl3.txt");
+        loadLevel("lvl4.txt");
     }
     
     public void loadLevel(String filename) {
@@ -122,6 +122,13 @@ public class PlayScreen implements Screen {
                     objects.add(s);
                     break;
                 }
+                case 'M':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    Mixer s = new Mixer(x, y);
+                    objects.add(s);
+                    break;
+                }
             }
         }
         
@@ -169,6 +176,15 @@ public class PlayScreen implements Screen {
                     s.setAfter(objects.get(after));
                     Key[] k = addMachine(s);
                     k[0].setX(220);
+                    k[0].setY(27);
+                    break;
+                }
+                case 'M':{
+                    Mixer m = (Mixer)objects.get(i-1);
+                    int after = Integer.parseInt(tokens[3]);
+                    m.setAfter((ConveyorBelt)objects.get(after));
+                    Key[] k = addMachine(m);
+                    k[0].setX(260);
                     k[0].setY(27);
                     break;
                 }
