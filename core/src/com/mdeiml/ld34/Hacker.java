@@ -44,7 +44,7 @@ public class Hacker extends Machine {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(frames[(int)(animTime/ANIM_TIME*)], TIME, TIME);
+        batch.draw(frames[(int)(animTime/ANIM_TIME*7)], TIME, TIME);
         p.render(batch);
     }
 
