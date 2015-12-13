@@ -3,6 +3,8 @@ package com.mdeiml.ld34;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -17,6 +19,9 @@ public class LD34Game extends Game {
     public void create() {
         batch = new SpriteBatch();
         assetMngr = new AssetManager();
+        
+        assetMngr.setLoader(String.class, new TextLoader(new LocalFileHandleResolver()));
+        
         assetMngr.load("skin.atlas", TextureAtlas.class);
         assetMngr.load("Vordergrund.png", Texture.class);
         assetMngr.load("background.png", Texture.class);
@@ -28,7 +33,11 @@ public class LD34Game extends Game {
         assetMngr.load("product1.png", Texture.class);
         assetMngr.load("sorter.png", Texture.class);
         assetMngr.load("exit.png", Texture.class);
-        for(int i = 1; i <= 3; i++) {
+        assetMngr.load("input.png", Texture.class);
+        assetMngr.load("oven.png", Texture.class);
+        assetMngr.load("press.png", Texture.class);
+        assetMngr.load("ambient.wav", Sound.class);
+        for(int i = 1; i <= 4; i++) {
             assetMngr.load("button"+i+"_up.png", Texture.class);
             assetMngr.load("button"+i+"_down.png", Texture.class);
         }
@@ -40,7 +49,18 @@ public class LD34Game extends Game {
         ConveyorBelt.right = new TextureRegion(assetMngr.get("cb_right.png", Texture.class));
         Sorter.tex = new TextureRegion(assetMngr.get("sorter.png", Texture.class));
         Exit.tex = new TextureRegion(assetMngr.get("exit.png", Texture.class));
+        Texture t = assetMngr.get("oven.png", Texture.class);
+        Oven.on = new TextureRegion(t, 0, 0, 45, 56);
+        Oven.off = new TextureRegion(t, 45, 0, 45, 56);
+        Oven.cook = new TextureRegion(t, 90, 0, 45, 56);
+        t = assetMngr.get("press.png", Texture.class);
+        TextureRegion[] anim = new TextureRegion[7];
+        for(int i = 0; i < 7; i++) {
+            anim[i] = new TextureRegion(t, i*30, 0, 30, 47);
+        }
+        Stomper.frames = anim;
         setScreen(new PlayScreen(this));
+        assetMngr.get("ambient.wav", Sound.class).loop();
     }
     
     @Override

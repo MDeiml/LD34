@@ -5,7 +5,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
@@ -60,36 +63,120 @@ public class PlayScreen implements Screen {
         fallings = new ArrayList<FallingProduct>();
         inputTime = 0;
         
-        level1();
+        loadLevel("lvl3.txt");
     }
     
-    public void level1() {
-        inputX = 6;
-        inputY = 288;
-        ConveyorBelt cb = new ConveyorBelt(0, 256, 64, true, 0);
-        input = cb;
-        Sorter sorter = new Sorter(47, 249);
-        cb.setAfter(sorter);
-        conveyors.add(cb);
-        Key[] k = addMachine(sorter);
-        k[0].setX(192-13);
-        k[0].setY(30);
-        k[1].setX(192);
-        k[1].setY(30);
-        System.out.println(Keys.toString(k[0].getKeycode()));
-        System.out.println(Keys.toString(k[1].getKeycode()));
-        cb = new ConveyorBelt(0, 181, 7*16+8, false, 0);
-        Exit e = new Exit(0, 180, true);
-        machines.add(e);
-        cb.setAfter(e);
-        conveyors.add(cb);
-        sorter.setDown(cb);
-        cb = new ConveyorBelt(72, 256, 384-72, true, 0);
-        e = new Exit(384-14, 255, false);
-        machines.add(e);
-        cb.setAfter(e);
-        conveyors.add(cb);
-        sorter.setRight(cb);
+    public void loadLevel(String filename) {
+        game.assetMngr.load(filename, String.class);
+        game.assetMngr.finishLoadingAsset(filename);
+        String level = game.assetMngr.get(filename, String.class);
+        level = level.replaceAll("\r", "");
+        String[] lines = level.split("\n");
+        
+        int sHeight = Gdx.graphics.getHeight() / 2;
+        
+        String[] inputTokens = lines[0].split(" ");
+        inputX = Integer.parseInt(inputTokens[0]);
+        inputY = sHeight - Integer.parseInt(inputTokens[1]);
+        
+        ArrayList<ProductTaker> objects = new ArrayList<ProductTaker>();
+        for(int i = 1; i < lines.length; i++) {
+            String[] tokens = lines[i].split(" ");
+            switch(tokens[0].charAt(0)) {
+                case 'C':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    int w = Integer.parseInt(tokens[3]);
+                    boolean dir = Boolean.parseBoolean(tokens[4]);
+                    int fh = Integer.parseInt(tokens[5]);
+                    ConveyorBelt cb = new ConveyorBelt(x, y, w, dir, fh);
+                    objects.add(cb);
+                    break;
+                }
+                case 'S':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    Sorter s = new Sorter(x, y);
+                    objects.add(s);
+                    break;
+                }
+                case 'E':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    boolean dir = Boolean.parseBoolean(tokens[3]);
+                    Exit e = new Exit(x, y, dir);
+                    objects.add(e);
+                    break;
+                }
+                case 'O':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    Oven o = new Oven(x, y);
+                    objects.add(o);
+                    break;
+                }
+                case 'T':{
+                    int x = Integer.parseInt(tokens[1]);
+                    int y = sHeight - Integer.parseInt(tokens[2]);
+                    Stomper s = new Stomper(x, y);
+                    objects.add(s);
+                    break;
+                }
+            }
+        }
+        
+        for(int i = 1; i < lines.length; i++) {
+            String[] tokens = lines[i].split(" ");
+            switch(tokens[0].charAt(0)) {
+                case 'C':{
+                    ConveyorBelt cb = (ConveyorBelt)objects.get(i-1);
+                    int after = Integer.parseInt(tokens[6]);
+                    cb.setAfter(objects.get(after));
+                    conveyors.add(cb);
+                    break;
+                }
+                case 'S':{
+                    Sorter s = (Sorter)objects.get(i-1);
+                    int down = Integer.parseInt(tokens[3]);
+                    int right = Integer.parseInt(tokens[4]);
+                    s.setDown((ConveyorBelt)objects.get(down));
+                    s.setRight((ConveyorBelt)objects.get(right));
+                    Key[] k = addMachine(s);
+                    k[0].setX(192-13);
+                    k[0].setY(30);
+                    k[1].setX(192);
+                    k[1].setY(30);
+                    break;
+                }
+                case 'E':{
+                    Exit e = (Exit)objects.get(i-1);
+                    addMachine(e);
+                    break;
+                }
+                case 'O':{
+                    Oven o = (Oven)objects.get(i-1);
+                    int after = Integer.parseInt(tokens[3]);
+                    o.setAfter((ConveyorBelt)objects.get(after));
+                    Key[] k = addMachine(o);
+                    k[0].setX(140);
+                    k[0].setY(28);
+                    k[0].setLeaver(true);
+                    break;
+                }
+                case 'T':{
+                    Stomper s = (Stomper)objects.get(i-1);
+                    int after = Integer.parseInt(tokens[3]);
+                    System.out.println(after);
+                    s.setAfter(objects.get(after));
+                    Key[] k = addMachine(s);
+                    k[0].setX(220);
+                    k[0].setY(27);
+                    break;
+                }
+            }
+        }
+        
+        input = (ConveyorBelt)objects.get(Integer.parseInt(inputTokens[2]));
     }
     
     public int addButton() {
@@ -171,13 +258,6 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         game.batch.draw(game.assetMngr.get("background.png", Texture.class),0,0);
-        game.batch.draw(game.assetMngr.get("board.png", Texture.class), 0, 0);
-        for(Machine m : machines) {
-            Key[] ks = m.getKeys();
-            for(Key k : ks) {
-                k.render(game.batch);
-            }
-        }
         for(FallingProduct p : fallings) {
             p.render(game.batch);
         }
@@ -186,6 +266,21 @@ public class PlayScreen implements Screen {
         }
         for(Machine m : machines) {
             m.render(game.batch);
+        }
+        game.batch.draw(game.assetMngr.get("input.png", Texture.class), inputX-4, inputY-14);
+        game.batch.draw(game.assetMngr.get("board.png", Texture.class), 0, 0);
+        BitmapFont font = game.assetMngr.get("ascii.fnt", BitmapFont.class);
+        for(Machine m : machines) {
+            Key[] ks = m.getKeys();
+            for(Key k : ks) {
+                k.render(game.batch);
+                int x1 = k.getX();
+                int y1 = k.getY();
+                int w = k.getWidth();
+                x1 = x1 + w / 2 - 2;
+                y1 = y1 - 9;
+                font.draw(game.batch, Keys.toString(k.getKeycode()), x1, y1);
+            }
         }
         //game.batch.draw(game.assetMngr.get("Vordergrund.png", Texture.class),0,0);
         game.batch.end();

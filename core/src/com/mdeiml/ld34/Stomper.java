@@ -4,39 +4,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 
-public class Oven extends Machine implements ProductTaker {
+public class Stomper extends Machine {
 
-    private static final float COOK_TIME = 3;
-    public static TextureRegion on;
-    public static TextureRegion off;
-    public static TextureRegion cook;
+    private static final float ANIM_TIME = 0.3f;
+    private static final int SPEED = 16;
+    public static TextureRegion[] frames;
     
-    private Product p;
     private int x;
     private int y;
+    private float anim;
+    private Product p;
     private Key[] keys;
-    private boolean hot;
-    private float cookTime;
-    private ConveyorBelt after;
+    private ProductTaker after;
     
-    public Oven(int x, int y) {
+    public Stomper(int x, int y) {
         this.x = x;
         this.y = y;
-        this.p = null;
-        this.hot = false;
-        cookTime = 0;
-    }
+    } 
     
     @Override
     public void update(float delta, ArrayList<FallingProduct> fallings) {
+        if(anim != 0) {
+            anim -= delta;
+            if(anim < 0)
+                anim = 0;
+        }
         if(p != null) {
-            if(hot) {
-                cookTime -= delta;
-                if(cookTime < 0) {
-                    after.takeProduct(p);
-                    p = null;
-                }
-            }else {
+            p.setY(p.getY() + delta * SPEED);
+            if(p.getY() > y + 32) {
                 after.takeProduct(p);
                 p = null;
             }
@@ -45,15 +40,9 @@ public class Oven extends Machine implements ProductTaker {
 
     @Override
     public void render(SpriteBatch batch) {
-        if(hot) {
-            if(p == null) {
-                batch.draw(on, x, y);
-            }else {
-                batch.draw(cook, x, y);
-            }
-        }else {
-            batch.draw(off, x, y);
-        }
+        batch.draw(frames[(int)(anim/ANIM_TIME*7)], x, y);
+        if(p != null)
+            p.render(batch);
     }
 
     @Override
@@ -73,9 +62,7 @@ public class Oven extends Machine implements ProductTaker {
 
     @Override
     public void activate(Key key) {
-        if(key == keys[0]) {
-            hot = !hot;
-        }
+        anim = ANIM_TIME;
     }
 
     @Override
@@ -83,11 +70,10 @@ public class Oven extends Machine implements ProductTaker {
         if(this.p != null)
             return false;
         this.p = p;
-        cookTime = COOK_TIME;
         return true;
     }
 
-    public void setAfter(ConveyorBelt after) {
+    public void setAfter(ProductTaker after) {
         this.after = after;
     }
 

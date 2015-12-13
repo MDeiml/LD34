@@ -31,7 +31,6 @@ public class ConveyorBelt implements ProductTaker {
     
     @Override
     public boolean takeProduct(Product p) {
-        System.out.println(x);
         if(p.getX() < x || p.getX() > x + width) {
             return false;
         }
