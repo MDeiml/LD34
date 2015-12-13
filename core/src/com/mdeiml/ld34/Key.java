@@ -12,6 +12,7 @@ public class Key {
     private TextureRegion down;
     private boolean state;
     private int keycode;
+    private boolean leaver;
     
     public Key(int code, int x, int y, TextureRegion up, TextureRegion down) {
         this.x = x;
@@ -20,10 +21,16 @@ public class Key {
         this.down = down;
         this.keycode = code;
         this.state = false;
+        this.leaver = false;
     }
     
     public void update() {
-        state = Gdx.input.isKeyPressed(keycode);
+        if(leaver) {
+            if(Gdx.input.isKeyJustPressed(keycode))
+                state = !state;
+        }else {
+            state = Gdx.input.isKeyPressed(keycode);
+        }
     }
     
     public void render(SpriteBatch batch) {
@@ -53,9 +60,17 @@ public class Key {
     public void setY(int y) {
         this.y = y;
     }
+    
+    public int getWidth() {
+        return up.getRegionWidth();
+    }
 
     public int getKeycode() {
         return keycode;
+    }
+
+    public void setLeaver(boolean leaver) {
+        this.leaver = leaver;
     }
     
 }
